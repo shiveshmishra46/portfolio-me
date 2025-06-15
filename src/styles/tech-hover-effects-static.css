@@ -1,0 +1,45 @@
+/* Tech Card Hover Styles */
+.tech-card {
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .tech-card:hover,
+  .tech-card:focus,
+  .tech-card:active {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 255, 0.15);
+  }
+  
+  .tech-name {
+    transition: color 0.3s ease, font-weight 0.3s ease;
+    color: #efefef;
+  }
+  
+  .tech-card:hover .tech-name,
+  .tech-card:focus .tech-name,
+  .tech-card:active .tech-name {
+    font-weight: bold;
+    color: #ffffff;
+  }
+  
+  /* Add specific media query for touch devices */
+  @media (hover: none) {
+    /* This applies only to touch devices */
+    .tech-card:active {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 255, 0.15);
+    }
+    
+    .tech-card:active .tech-name {
+      font-weight: bold;
+      color: #ffffff;
+    }
+  }
+  
+  /* Ensure focus styles work properly for accessibility */
+  .tech-card:focus-visible {
+    outline: 2px solid rgba(0, 0, 255, 0.5);
+    outline-offset: 2px;
+  }
