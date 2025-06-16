@@ -1,79 +1,67 @@
-// -----------------Device Detection Modal-----------------
-// Simplified modal for performance mode selection
-import { useDevice } from '../context/DeviceContext';
+import React, { useState, useEffect } from "react";
+import { useDevice } from "../context/DeviceContext";
 
-const DeviceDetectionModal = () => {
-  const { setPerformanceMode, isModalOpen, setIsModalOpen } = useDevice();
+// Add forceShow and onClose props
+const DeviceDetectionModal = ({ forceShow = false, onClose = () => {} }) => {
+  // Local state for controlling the modal visibility
+  const [localShowModal, setLocalShowModal] = useState(false);
+  const { updatePerformanceMode } = useDevice();
+
+  // Effect to handle external visibility control
+  useEffect(() => {
+    if (forceShow) {
+      setLocalShowModal(true);
+    }
+  }, [forceShow]);
   
-  if (!isModalOpen) return null;
-  
-  const handleModeSelect = (mode) => {
-    setPerformanceMode(mode);
-    setIsModalOpen(false);
-    window.location.reload(); // Force reload to apply changes
+  // Close modal function
+  const closeModal = () => {
+    setLocalShowModal(false);
+    onClose(); // Call the parent's callback
   };
-  
+
+  // Handle mode selection
+  const handleModeSelect = (mode) => {
+    updatePerformanceMode(mode);
+    closeModal();
+  };
+
+  // If modal isn't showing, don't render anything
+  if (!localShowModal && !forceShow) return null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
-      <div className="bg-gray-900 border border-gray-700 rounded-lg max-w-md w-11/12 p-6 animate-fadeIn shadow-xl">
-        <h2 className="text-2xl font-bold text-white mb-4">Welcome to My Portfolio</h2>
+    <div className="fixed inset-0 z-[200] flex items-center justify-center" style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}>
+      <div className="bg-black-200 rounded-2xl p-6 max-w-md w-full mx-4" style={{ animation: "0.3s ease-out 0s 1 normal forwards running fadeIn" }}>
+        <h2 className="text-2xl font-bold text-white-50 mb-4">Select Experience Mode</h2>
+        <p className="text-white-50 mb-6">Choose the mode that best suits your device:</p>
         
-        <div className="bg-gray-800 border-l-4 border-blue-500 p-4 mb-6 rounded">
-          <h3 className="text-white font-semibold mb-2">Important Instructions:</h3>
-          <ul className="text-gray-300 list-disc pl-5 space-y-1">
-            <li>For <span className="text-yellow-400">low-end devices</span> or <span className="text-yellow-400">mobile phones</span>, choose <span className="font-bold text-green-400">Balanced Mode</span></li>
-            <li>For <span className="text-yellow-400">high-end devices</span> and <span className="text-yellow-400">best 3D experience</span>, select <span className="font-bold text-blue-400">Ultra Mode</span></li>
-            <li>You can change this setting anytime from the settings panel</li>
-          </ul>
-        </div>
-        
-        <p className="text-gray-300 mb-4 font-medium">
-          Select the mode that works best for your device:
-        </p>
-        
-        <div className="space-y-3">
-          <button
-            onClick={() => handleModeSelect("balanced")}
-            className="w-full bg-gray-800 hover:bg-green-600 text-white rounded-md p-4 text-left transition-all duration-300 hover:shadow-lg hover:shadow-green-900/30 border border-transparent hover:border-green-500"
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <button 
+            onClick={() => handleModeSelect("balanced")} 
+            className="bg-black-100 hover:bg-black-50 transition-colors duration-300 p-4 rounded-lg border border-blue-900"
           >
-            <div className="flex items-start">
-              <div className="mr-3 mt-1">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <span className="block font-medium text-lg">Balanced Mode</span>
-                <span className="block text-sm text-gray-400">
-                  Static images, minimal animations (low-end devices)
-                </span>
-              </div>
-            </div>
+            <div className="text-xl font-medium mb-2 text-white">Balanced</div>
+            <p className="text-sm text-blue-50">Recommended for most devices</p>
           </button>
           
-          <button
-            onClick={() => handleModeSelect("ultra")}
-            className="w-full bg-gray-800 hover:bg-blue-600 text-white rounded-md p-4 text-left transition-all duration-300 hover:shadow-lg hover:shadow-blue-900/30 border border-transparent hover:border-blue-500"
+          <button 
+            onClick={() => handleModeSelect("high")} 
+            className="bg-black-100 hover:bg-black-50 transition-colors duration-300 p-4 rounded-lg border border-black-50"
           >
-            <div className="flex items-start">
-              <div className="mr-3 mt-1">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <div>
-                <span className="block font-medium text-lg">Ultra Mode</span>
-                <span className="block text-sm text-gray-400">
-                  Full 3D models and animations (high-end devices)
-                </span>
-              </div>
-            </div>
+            <div className="text-xl font-medium mb-2">High</div>
+            <p className="text-sm text-blue-50">Best for modern, powerful devices</p>
           </button>
         </div>
+        
+        <button 
+          onClick={closeModal} 
+          className="mt-6 text-blue-50 hover:text-white transition-colors duration-300 w-full"
+        >
+          Continue with current settings
+        </button>
       </div>
     </div>
   );
 };
 
 export default DeviceDetectionModal;
-// -----------------Device Detection Modal-----------------

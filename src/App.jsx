@@ -31,6 +31,8 @@
 
 //-------------------Main---------------------
 //-------------------Main---------------------
+//-------------------Main---------------------
+import { useState, useEffect } from "react";
 import Testimonials from "./sections/Testimonials.jsx";
 import Footer from "./sections/Footer.jsx";
 import ExperienceSection from "./sections/ExperienceSection";
@@ -45,23 +47,48 @@ import OptimizedContact from "./sections/OptimizedContact.jsx";
 import DeviceDetectionModal from "./components/DeviceDetectionModal.jsx";
 import PerformancePanel from "./components/PerformancePanel.jsx";
 
+const AppContent = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  // This effect runs once when the component mounts (page loads/refreshes)
+  useEffect(() => {
+    // Always force balanced mode on page refresh
+    localStorage.setItem("performance_mode", "balanced");
+    
+    // Show device selection modal after a short delay
+    const timer = setTimeout(() => {
+      setShowModal(true);
+    }, 1500); // 1.5 second delay
+    
+    return () => clearTimeout(timer); // Clean up the timer
+  }, []);
+
+  // Pass the showModal state directly to DeviceDetectionModal
+  return (
+    <>
+      <DeviceDetectionModal forceShow={showModal} onClose={() => setShowModal(false)} />
+      <Navbar />
+      <OptimizedHero />
+      <Showcase />
+      <LogoShowcase />
+      <Featurecards />
+      <ExperienceSection />
+      <OptimizedTechStack />
+      <Testimonials />
+      <OptimizedContact />
+      <Footer />
+      <PerformancePanel />
+    </>
+  );
+};
+
 const App = () => (
   <DeviceProvider>
-    <DeviceDetectionModal />
-    <Navbar />
-    <OptimizedHero />
-    <Showcase />
-    <LogoShowcase />
-    <Featurecards />
-    <ExperienceSection />
-    <OptimizedTechStack />
-    <Testimonials />
-    <OptimizedContact />
-    <Footer />
-    <PerformancePanel />
+    <AppContent />
   </DeviceProvider>
 );
 
 export default App;
+//-----------------Main-----------------
 //-----------------Main-----------------
 //-----------------Main-----------------
