@@ -7,7 +7,7 @@ const OptimizedContactExperience = () => {
   const { performanceMode } = useDevice();
   
   // Direct rendering based on performance mode - no transitions
-  if (performanceMode === "basic") {
+  if (performanceMode === "balanced") {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <img 
@@ -22,7 +22,7 @@ const OptimizedContactExperience = () => {
     );
   }
   
-  // For ultra and balanced modes, return the 3D component
+  // For ultra mode only, return the 3D component
   return <ContactExperience />;
 };
 

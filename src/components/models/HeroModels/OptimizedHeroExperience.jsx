@@ -5,8 +5,8 @@ import HeroExperience from './HeroExperience';
 const OptimizedHeroExperience = () => {
   const { performanceMode } = useDevice();
   
-  // Direct rendering based on performance mode - no transitions
-  if (performanceMode === "basic") {
+  // Show static image for balanced mode (formerly basic mode)
+  if (performanceMode === "balanced") {
     return (
       <div className="w-full h-full">
         <img 
@@ -18,7 +18,7 @@ const OptimizedHeroExperience = () => {
     );
   }
   
-  // For ultra and balanced modes, return the 3D component
+  // Only for ultra mode, return the 3D component
   return <HeroExperience />;
 };
 

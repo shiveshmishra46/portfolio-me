@@ -7,7 +7,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 // Create context with default values
 export const DeviceContext = createContext({
   deviceCapability: "detecting", // possible values: "detecting", "high", "medium", "low"
-  performanceMode: "auto", // possible values: "ultra", "balanced", "basic", "auto"
+  performanceMode: "auto", // possible values: "ultra", "balanced", "auto"
   isFirstVisit: true,
   setPerformanceMode: () => {},
   isModalOpen: false,
@@ -125,7 +125,7 @@ export const DeviceProvider = ({ children }) => {
           setPerformanceMode("balanced");
           break;
         case "low":
-          setPerformanceMode("basic");
+          setPerformanceMode("balanced");
           break;
         default:
           setPerformanceMode("balanced");
