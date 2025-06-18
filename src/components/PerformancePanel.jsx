@@ -6,7 +6,7 @@ import { Settings } from 'lucide-react';
 import gsap from 'gsap';
 
 const PerformancePanel = () => {
-  const { performanceMode, setPerformanceMode } = useDevice();
+  const { performanceMode, updatePerformanceMode } = useDevice();
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef(null);
   const buttonRef = useRef(null);
@@ -34,6 +34,13 @@ const PerformancePanel = () => {
     }
   }, [isOpen]);
 
+  const handleModeChange = (mode) => {
+    updatePerformanceMode(mode);
+    // Add flag to indicate mode was changed via panel
+    sessionStorage.setItem('mode_changed_via_panel', 'true');
+    setIsOpen(false);
+  };
+
   return (
     <div className="fixed z-50 bottom-5 right-5">
       {/* Toggle Button */}
@@ -54,7 +61,7 @@ const PerformancePanel = () => {
         >
           <h3 className="text-white font-medium text-lg mb-3 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             Performance Settings
@@ -70,10 +77,7 @@ const PerformancePanel = () => {
           
           <div className="space-y-2">
             <button
-              onClick={() => {
-                setPerformanceMode("balanced");
-                window.location.reload(); // Force reload to apply changes
-              }}
+              onClick={() => handleModeChange("balanced")}
               className={`w-full text-left px-4 py-3 rounded-md transition-all duration-300 flex items-center ${
                 performanceMode === "balanced" 
                   ? "bg-green-600 shadow-md shadow-green-900/50" 
@@ -89,10 +93,7 @@ const PerformancePanel = () => {
             </button>
             
             <button
-              onClick={() => {
-                setPerformanceMode("ultra");
-                window.location.reload(); // Force reload to apply changes
-              }}
+              onClick={() => handleModeChange("ultra")}
               className={`w-full text-left px-4 py-3 rounded-md transition-all duration-300 flex items-center ${
                 performanceMode === "ultra" 
                   ? "bg-blue-600 shadow-md shadow-blue-900/50" 
@@ -110,7 +111,7 @@ const PerformancePanel = () => {
           
           <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-700">
             <p className="text-gray-400 text-xs">
-              Changes will apply after reload
+              Changes apply immediately
             </p>
             <button
               onClick={() => setIsOpen(false)}

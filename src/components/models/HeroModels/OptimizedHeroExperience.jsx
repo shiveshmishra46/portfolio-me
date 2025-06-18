@@ -8,7 +8,7 @@ const OptimizedHeroExperience = () => {
   // Show static image for balanced mode (formerly basic mode)
   if (performanceMode === "balanced") {
     return (
-      <div className="w-full h-full">
+      <div className="w-full h-full pt-28 px12 pb-12"> {/*Combined pr-12 pl-12 to px-12 */}
         <img 
           src="/images/hero-room-static.png" 
           alt="Hero Room" 

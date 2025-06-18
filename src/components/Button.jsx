@@ -6,7 +6,7 @@
 
 
 // ------------------Main--------------------
-const Button = ({ text, className, id }) => {
+const Button = ({ text, className, id}) => {
   return (
     <a
       onClick={(e) => {

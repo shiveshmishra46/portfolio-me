@@ -58,7 +58,17 @@ const Hero = () => {
               <h1>Full-Stack Developer</h1>
             </div>
           <p className="text-white-50 md:text-xl relative z-10 pointer-events-none">
-            Hi, I'm Shivesh, a developer based in Greater Noida with a passion for code.
+            "Hi, I'm <span className="font-bold animated-text">Shivesh</span>, a developer based in Greater Noida with a passion for code. 
+            <br className="hidden md:block" />
+            Equipped with a <span className="font-bold animated-text">Problem - Solving</span> and <span className="font-bold animated-text">Competitive - Programming</span> "CP"
+            <br className="hidden md:block" />  
+            mindset. I approach complex issues with <span className="font-bold animated-text">Algorithmic</span> precision and make
+            <br className="hidden md:block" />
+            creative solutions. I <span className="font-bold animated-text">specialized</span> in <span className="font-bold animated-text">Full-Stack Development</span> with expertise
+            <br className="hidden md:block" />
+            in <span className="font-bold animated-text">ReactJS</span>, <span className="font-bold animated-text">NodeJS</span>, and <span className="font-bold animated-text">modern web technologies</span>. I turn <span className="font-bold animated-text">ideas</span> into <span className="font-bold animated-text">int-</span>
+            <br className="hidden md:block" />
+            <span className="font-bold animated-text">eractive experiences</span>. The website shouldn't just exist <span className="font-bold animated-text">it should perform.</span>"
           </p>
           <Button
             className="md:w-80 md:h-16 w-60 h-12"

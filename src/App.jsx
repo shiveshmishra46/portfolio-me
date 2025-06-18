@@ -30,8 +30,7 @@
 //-----------------Main-----------------
 
 //-------------------Main---------------------
-//-------------------Main---------------------
-//-------------------Main---------------------
+
 import { useState, useEffect } from "react";
 import Testimonials from "./sections/Testimonials.jsx";
 import Footer from "./sections/Footer.jsx";
@@ -52,15 +51,24 @@ const AppContent = () => {
 
   // This effect runs once when the component mounts (page loads/refreshes)
   useEffect(() => {
-    // Always force balanced mode on page refresh
-    localStorage.setItem("performance_mode", "balanced");
+    // Check if mode was changed via panel
+    const modeChangedViaPanel = sessionStorage.getItem('mode_changed_via_panel') === 'true';
     
-    // Show device selection modal after a short delay
-    const timer = setTimeout(() => {
-      setShowModal(true);
-    }, 1500); // 1.5 second delay
-    
-    return () => clearTimeout(timer); // Clean up the timer
+    // Only show modal on true page refresh, not after panel change
+    if (!modeChangedViaPanel) {
+      // Always force balanced mode on fresh page load/refresh
+      localStorage.setItem("performance_mode", "balanced");
+      
+      // Show device selection modal after a short delay
+      const timer = setTimeout(() => {
+        setShowModal(true);
+      }, 1500); // 1.5 second delay
+      
+      return () => clearTimeout(timer); // Clean up the timer
+    } else {
+      // Clear the flag after using it
+      sessionStorage.removeItem('mode_changed_via_panel');
+    }
   }, []);
 
   // Pass the showModal state directly to DeviceDetectionModal
@@ -89,6 +97,5 @@ const App = () => (
 );
 
 export default App;
-//-----------------Main-----------------
-//-----------------Main-----------------
+
 //-----------------Main-----------------

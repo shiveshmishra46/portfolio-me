@@ -21,7 +21,7 @@ const DeviceDetectionModal = ({ forceShow = false, onClose = () => {} }) => {
   };
 
   // Handle mode selection
-  const handleModeSelect = (mode) => {
+  const setPerformanceMode = (mode) => {
     updatePerformanceMode(mode);
     closeModal();
   };
@@ -37,19 +37,19 @@ const DeviceDetectionModal = ({ forceShow = false, onClose = () => {} }) => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button 
-            onClick={() => handleModeSelect("balanced")} 
+            onClick={() => setPerformanceMode("balanced")} 
             className="bg-black-100 hover:bg-black-50 transition-colors duration-300 p-4 rounded-lg border border-blue-900"
           >
-            <div className="text-xl font-medium mb-2 text-white">Balanced</div>
-            <p className="text-sm text-blue-50">Recommended for most devices</p>
+            <div className="text-xl font-medium mb-2 text-white">Balanced Mode ||Static||</div>
+            <p className="text-sm text-blue-50">Best for "Base" to "Medium" segment of Devices</p>
           </button>
           
           <button 
-            onClick={() => handleModeSelect("high")} 
+            onClick={() => setPerformanceMode("ultra")} 
             className="bg-black-100 hover:bg-black-50 transition-colors duration-300 p-4 rounded-lg border border-black-50"
           >
-            <div className="text-xl font-medium mb-2">High</div>
-            <p className="text-sm text-blue-50">Best for modern, powerful devices</p>
+            <div className="text-xl font-medium mb-2">Ultra Mode ||3D||</div>
+            <p className="text-sm text-blue-50">Best for "High" and "Premium" segment of Devices</p>
           </button>
         </div>
         

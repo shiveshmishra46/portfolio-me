@@ -324,6 +324,16 @@ section {
   animation: wordSlider 21s infinite cubic-bezier(0.9, 0.01, 0.3, 0.99);
 }
 
+.cta-wrapper {
+  width: 30rem; 
+}
+
+@media (max-width: 640px) {
+  .cta-wrapper {
+    width: 100%; /* Full width on mobile */
+  }
+}
+
 @keyframes wordSlider {
   0% {
     transform: translateY(0.5%);
@@ -728,6 +738,23 @@ With this: */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Add these styles to your index.css or equivalent file */
+
+@keyframes floatDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: floatDown 1s ease-out forwards;
 }
 
 
