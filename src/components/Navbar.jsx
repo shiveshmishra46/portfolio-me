@@ -215,13 +215,13 @@ const Navbar = () => {
             href="/resume.pdf" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="resume-download-btn group" 
+            className="contact-btn group" 
             download="Shivesh_Mishra_Resume.pdf"
           >
             <div className="inner">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                className="h-4 w-4 mr-1" 
+                className="h-4 w-4 inline-block align-text-bottom mr-1" 
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
@@ -282,35 +282,11 @@ const Navbar = () => {
       )}
 
       <style jsx>{`
-        .resume-download-btn {
-          display: flex;
-        }
-        
-        .resume-download-btn .inner {
-          padding: 0.5rem 1.25rem;
-          border-radius: 0.5rem;
-          background-color: white;
-          color: black;
+        /* Reset transitions for all text elements */
+        .contact-btn .inner {
           transition: background-color 0.3s ease;
-          display: flex;
-          align-items: center;
         }
-        
-        .resume-download-btn.group:hover .inner {
-          background-color: #1c1c21; /* This is the bg-black-50 color */
-        }
-        
-        .resume-download-btn.group:hover .inner svg,
-        .resume-download-btn.group:hover .inner span {
-          color: white;
-          transition: color 0.3s ease;
-        }
-        
-        .resume-download-btn .inner svg {
-          transition: color 0.3s ease;
-        }
-        
-        .resume-download-btn .inner span {
+        .contact-btn .inner * {
           transition: color 0.3s ease;
         }
       `}</style>

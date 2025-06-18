@@ -325,7 +325,7 @@ section {
 }
 
 .cta-wrapper {
-  width: 30rem; 
+  width: 28rem; 
 }
 
 @media (max-width: 640px) {
@@ -485,19 +485,9 @@ section {
   @apply w-full h-full object-cover;
 }
 
-.profile-modal {
-  @apply fixed inset-0 z-[200];
-  background: rgb(0, 0, 0);
-  animation: fadeIn 0.4s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
-}
-
-.profile-modal.closing {
-  animation: fadeOut 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
-}
-
-.modal-content {
+/* .modal-content {
   @apply fixed rounded-2xl p-5 shadow-lg overflow-hidden bg-black-200;
-  top: 110px;  /* Adjusted to be lower */
+  top: 110px;  /* Adjusted to be lower
   left: 50%;
   transform: translateX(-50%);
   width: 90vw;
@@ -511,7 +501,7 @@ section {
 
 .modal-header {
   @apply flex items-center justify-between mb-3;
-}
+} */
 
 .modal-title {
   @apply text-xl md:text-2xl text-white-50 font-semibold;
@@ -806,4 +796,93 @@ With this: */
   }
 }
 
+/* Mobile responsive fixes for navbar and about text - Added 2025-06-18 11:24:52 */
+
+/* Navbar logo text size adjustments */
+@media (max-width: 640px) {
+  .navbar .logo {
+    font-size: 1rem; /* Smaller on mobile */
+    letter-spacing: -0.5px; /* Tighter spacing on small screens */
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .navbar .logo {
+    font-size: 1.1rem; /* Medium size for tablets */
+  }
+}
+
+/* Make both buttons consistent - ensuring Resume button matches Contact Me button */
+.navbar .contact-btn {
+  @apply flex;
+}
+
+/* Synchronize transitions for both text and SVG icon */
+.navbar .contact-btn .inner svg {
+  stroke: currentColor; /* Use current text color for stroke */
+  transition: all 0.3s ease !important; /* Match existing transition */
+}
+
+.navbar .contact-btn .inner {
+  @apply px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded-lg bg-white text-black text-sm sm:text-base 
+    group-hover:bg-black-50 transition-colors duration-300;
+}
+
+.navbar .contact-btn .inner * {
+  transition: all 0.3s ease !important; /* Force same transition for all child elements */
+}
+
+/* About text paragraph responsiveness */
+@media (max-width: 640px) {
+  .text-white-50.md\:text-xl {
+    font-size: 0.875rem; /* Much smaller on mobile */
+    line-height: 1.4;
+    letter-spacing: -0.3px; /* Slightly tighter tracking */
+  }
+  
+  .font-bold.animated-text {
+    font-size: 0.95rem; /* Slightly larger than regular text for emphasis */
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .text-white-50.md\:text-xl {
+    font-size: 0.95rem; /* Medium size for tablets */
+    line-height: 1.5;
+  }
+}
+
+/* Fix spacing for Resume button to match Contact Me */
+.navbar .contact-btn .inner span.hidden + span.inline-block {
+  margin-left: 0; /* Remove extra margin when "Download" is hidden */
+}
+
+/* Prevent button text overflow and ensure proper sizing on smaller screens */
+@media (max-width: 500px) {
+  .navbar {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .navbar .logo {
+    font-size: 0.9rem;
+  }
+  
+  .navbar .contact-btn .inner {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Reduce icon size on very small screens */
+  .navbar .contact-btn .inner .h-4 {
+    width: 0.875rem;
+    height: 0.875rem;
+    margin-right: 0.1rem;
+  }
+  
+  /* Create more space between buttons */
+  .navbar .flex.items-center.gap-\[6px\] {
+    gap: 3px;
+  }
+}
 /*----------------------------------------------------------------*/
