@@ -485,24 +485,6 @@ section {
   @apply w-full h-full object-cover;
 }
 
-/* .modal-content {
-  @apply fixed rounded-2xl p-5 shadow-lg overflow-hidden bg-black-200;
-  top: 110px;  /* Adjusted to be lower
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90vw;
-  max-width: 32rem;
-  animation: expandFromTop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-.modal-content.closing {
-  animation: shrinkToTop 0.5s cubic-bezier(0, 0.55, 0.45, 1) forwards;
-}
-
-.modal-header {
-  @apply flex items-center justify-between mb-3;
-} */
-
 .modal-title {
   @apply text-xl md:text-2xl text-white-50 font-semibold;
 }
@@ -548,6 +530,7 @@ section {
   object-fit: cover;
 }
 
+/* Animation keyframes */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -556,35 +539,6 @@ section {
 @keyframes fadeOut {
   from { opacity: 1; }
   to { opacity: 0; }
-}
-
-@keyframes expandFromTop {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px) translateX(-50%) scale(0.8);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(0) translateX(-50%) scale(1.05);
-  }
-  100% {
-    transform: translateY(0) translateX(-50%) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes shrinkToTop {
-  0% {
-    opacity: 1;
-    transform: translateY(0) translateX(-50%) scale(1);
-  }
-  40% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-20px) translateX(-50%) scale(0.8);
-  }
 }
 
 @keyframes imageReveal {
@@ -609,28 +563,56 @@ section {
   }
 }
 
-/* Add responsive adjustments */
-@media (max-width: 640px) {
-  .modal-content {
-    width: 95vw;
-    padding: 15px;
-    top: 95px;
+@keyframes floatDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 320px) {
-  .modal-content {
-    width: 98vw;
-    padding: 10px;
-    top: 80px;
+@keyframes floatingIcon {
+  0% {
+    transform: translateY(0) scale(1.05);
   }
-  
-  .modal-title {
-    @apply text-lg;
+  50% {
+    transform: translateY(-8px) scale(1.05);
   }
-  
-  .close-modal {
-    @apply text-2xl;
+  100% {
+    transform: translateY(0) scale(1.05);
+  }
+}
+
+/* Modal animations */
+@keyframes expandFromCorner {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shrinkToCorner {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  40% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.1);
   }
 }
 
@@ -666,22 +648,17 @@ section {
   transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Floating animation for tech icons */
-@keyframes floatingIcon {
-  0% {
-    transform: translateY(0) scale(1.05);
-  }
-  50% {
-    transform: translateY(-8px) scale(1.05);
-  }
-  100% {
-    transform: translateY(0) scale(1.05);
-  }
-}
-
 /* Apply animation when active */
 .floating-animation {
   animation: floatingIcon 3s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-float {
+  animation: floatDown 1s ease-out forwards;
 }
 
 /* Touch screen specific optimizations */
@@ -700,56 +677,12 @@ section {
   }
 }
 
-/* Replace this:
-.fixed inset-0 z-[200] flex items-center justify-center bg-black bg-opacity-70
-
-With this: */
+/* Modal styling */
 .modal-backdrop {
   @apply fixed inset-0 z-[200] flex items-center justify-center;
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-/* Animation for device selection modal */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Add these styles to your index.css or equivalent file */
-
-@keyframes floatDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-float {
-  animation: floatDown 1s ease-out forwards;
-}
-
-
-/* Modal content styling update only */
-/* Just update this one class if there's any issue with opening from top left */
 .modal-content {
   position: absolute;
   background-color: #282732;
@@ -766,43 +699,27 @@ With this: */
   animation: shrinkToCorner 0.5s cubic-bezier(0, 0.55, 0.45, 1) forwards;
 }
 
-/* Replace expandFromTop and shrinkToTop animations with these */
-@keyframes expandFromCorner {
-  0% {
-    opacity: 0;
-    transform: scale(0.1);
+/* Responsive adjustments */
+@media (max-width: 700px) {
+  .modal-content {
+    width: 95vw;
+    padding: 15px;
+    top: 95px;
   }
-  60% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
 
-@keyframes shrinkToCorner {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  40% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.1);
-  }
-}
-
-/* Mobile responsive fixes for navbar and about text - Added 2025-06-18 11:24:52 */
-
-/* Navbar logo text size adjustments */
-@media (max-width: 640px) {
   .navbar .logo {
     font-size: 1rem; /* Smaller on mobile */
-    letter-spacing: -0.5px; /* Tighter spacing on small screens */
+    letter-spacing: -0.1px; /* Tighter spacing on small screens */
+  }
+  
+  .text-white-50.md\:text-xl {
+    font-size: 1.1rem; /* Much smaller on mobile */
+    line-height: 1.25;
+    letter-spacing: -0.2px; /* Slightly tighter tracking */
+  }
+  
+  .font-bold.animated-text {
+    font-size: 0.97rem; /* Slightly larger than regular text for emphasis */
   }
 }
 
@@ -810,54 +727,13 @@ With this: */
   .navbar .logo {
     font-size: 1.1rem; /* Medium size for tablets */
   }
-}
-
-/* Make both buttons consistent - ensuring Resume button matches Contact Me button */
-.navbar .contact-btn {
-  @apply flex;
-}
-
-/* Synchronize transitions for both text and SVG icon */
-.navbar .contact-btn .inner svg {
-  stroke: currentColor; /* Use current text color for stroke */
-  transition: all 0.3s ease !important; /* Match existing transition */
-}
-
-.navbar .contact-btn .inner {
-  @apply px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded-lg bg-white text-black text-sm sm:text-base 
-    group-hover:bg-black-50 transition-colors duration-300;
-}
-
-.navbar .contact-btn .inner * {
-  transition: all 0.3s ease !important; /* Force same transition for all child elements */
-}
-
-/* About text paragraph responsiveness */
-@media (max-width: 640px) {
-  .text-white-50.md\:text-xl {
-    font-size: 0.875rem; /* Much smaller on mobile */
-    line-height: 1.4;
-    letter-spacing: -0.3px; /* Slightly tighter tracking */
-  }
   
-  .font-bold.animated-text {
-    font-size: 0.95rem; /* Slightly larger than regular text for emphasis */
-  }
-}
-
-@media (min-width: 641px) and (max-width: 768px) {
   .text-white-50.md\:text-xl {
     font-size: 0.95rem; /* Medium size for tablets */
     line-height: 1.5;
   }
 }
 
-/* Fix spacing for Resume button to match Contact Me */
-.navbar .contact-btn .inner span.hidden + span.inline-block {
-  margin-left: 0; /* Remove extra margin when "Download" is hidden */
-}
-
-/* Prevent button text overflow and ensure proper sizing on smaller screens */
 @media (max-width: 500px) {
   .navbar {
     padding-left: 0.5rem;
@@ -877,12 +753,54 @@ With this: */
   .navbar .contact-btn .inner .h-4 {
     width: 0.875rem;
     height: 0.875rem;
-    margin-right: 0.1rem;
+    margin-right: 0.01rem;
   }
   
   /* Create more space between buttons */
   .navbar .flex.items-center.gap-\[6px\] {
-    gap: 3px;
+    gap: 6px;
   }
 }
-/*----------------------------------------------------------------*/
+
+@media (max-width: 320px) {
+  .modal-content {
+    width: 98vw;
+    padding: 10px;
+    top: 80px;
+  }
+  
+  .modal-title {
+    @apply text-lg;
+  }
+  
+  .close-modal {
+    @apply text-2xl;
+  }
+}
+
+/* Mobile responsive fixes for navbar and about text */
+
+/* Make both buttons consistent - ensuring Resume button matches Contact Me button */
+.navbar .contact-btn {
+  @apply flex;
+}
+
+/* Synchronize transitions for both text and SVG icon */
+.navbar .contact-btn .inner svg {
+  stroke: currentColor; /* Use current text color for stroke */
+  transition: all 0.3s ease !important; /* Match existing transition */
+}
+
+.navbar .contact-btn .inner {
+  @apply px-1 py-0.5 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded-lg bg-white text-black text-sm sm:text-base 
+    group-hover:bg-black-50 transition-colors duration-300;
+}
+
+.navbar .contact-btn .inner * {
+  transition: all 0.3s ease !important; /* Force same transition for all child elements */
+}
+
+/* Fix spacing for Resume button to match Contact Me */
+.navbar .contact-btn .inner span.hidden + span.inline-block {
+  margin-left: 0; /* Remove extra margin when "Download" is hidden */
+}

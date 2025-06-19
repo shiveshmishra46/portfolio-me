@@ -216,7 +216,7 @@ const Navbar = () => {
             target="_blank" 
             rel="noopener noreferrer" 
             className="contact-btn group" 
-            download="Shivesh_Mishra_Resume.pdf"
+            download="Shivesh's_Resume.pdf"
           >
             <div className="inner">
               <svg 
