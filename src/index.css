@@ -207,7 +207,7 @@ section {
   }
 
   .cta-button {
-    @apply px-4 py-4 rounded-lg bg-black-200 flex justify-center items-center relative cursor-pointer overflow-hidden;
+    @apply px-4 py-3 rounded-lg bg-black-200 flex justify-center items-center relative cursor-pointer overflow-hidden;
 
     .bg-circle {
       @apply absolute -right-10 origin-center top-1/2 -translate-y-1/2 
@@ -325,12 +325,12 @@ section {
 }
 
 .cta-wrapper {
-  width: 28rem; 
+  width: 18rem; 
 }
 
 @media (max-width: 640px) {
   .cta-wrapper {
-    width: 100%; /* Full width on mobile */
+    width: 80%; /* Full width on mobile */
   }
 }
 
@@ -489,14 +489,14 @@ section {
   @apply text-xl md:text-2xl text-white-50 font-semibold;
 }
 
-.close-modal {
+/* .close-modal {
   @apply text-white text-3xl cursor-pointer hover:text-white-50 transition-all duration-300;
   opacity: 0;
   animation: fadeIn 0.3s 0.3s forwards;
   line-height: 1;
-}
+} */
 
-.modal-content.closing .close-modal {
+/* .modal-content.closing .close-modal {
   animation: fadeOut 0.3s forwards;
 }
 
@@ -515,7 +515,7 @@ section {
 
 .image-wrapper-profile {
   width: 100%;
-  padding-top: 100%; /* 1:1 Aspect ratio */
+  padding-top: 100%; /* 1:1 Aspect ratio 
   position: relative;
   overflow: hidden;
   border-radius: 12px;
@@ -528,7 +528,7 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
+} */
 
 /* Animation keyframes */
 @keyframes fadeIn {
@@ -796,7 +796,35 @@ section {
     group-hover:bg-black-50 transition-colors duration-300;
 }
 
-.navbar .contact-btn .inner * {
+/* Add this to the end of your index.css file */
+.navbar .contact-btn .inner {
+  /* This will override your earlier definitions */
+  font-size: 0.75rem; /* Default mobile size */
+}
+
+@media (min-width: 640px) {
+  .navbar .contact-btn .inner {
+    font-size: 0.8125rem; /* Tablet and up */
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar .contact-btn .inner {
+    font-size: 0.875rem; /* Desktop */
+  }
+}
+
+.navbar .contact-btn.group:hover .inner svg {
+  stroke: white !important; /* Explicitly set the stroke color on hover */
+}
+
+/* Ensure the currentColor is properly applied */
+.navbar .contact-btn .inner svg {
+  stroke: currentColor;
+  transition: stroke 0.3s ease;
+}
+
+.navbar .contact-btn .inner *{
   transition: all 0.3s ease !important; /* Force same transition for all child elements */
 }
 
@@ -805,21 +833,256 @@ section {
   margin-left: 0; /* Remove extra margin when "Download" is hidden */
 }
 
-/* Profile hover styles */
+/* Profile hover styles 
 @media (min-width: 768px) {
-  /* Hide profile pic on desktop when expanded */
+   Hide profile pic on desktop when expanded 
   .profile-pic.hidden-on-desktop {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
   }
 } 
-  /*Make sure the expanded profile appears on top */
+  Make sure the expanded profile appears on top 
   
   .profile-container {
     position: relative;
     z-index: 100;
-  }
+  }*/
   
 
+/* New mobile profile modal styles to your index.css */
+
+/* Mobile profile modal - completely separate from navbar */
+.mobile-profile-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start; /* Align to left side */
+  align-items: flex-start; /* Align to top */
+  padding-top: 0; /* Remove padding to allow exact positioning */
+  padding-left: 0; /* Remove padding to allow exact positioning */
+  z-index: 1000; /* Higher than navbar */
+  pointer-events: auto;
+  will-change: opacity; /* Performance optimization */
+}
+
+.mobile-profile-modal {
+  width: 80%;
+  max-width: 300px;
+  background-color: #282732;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  transform: scale(0.8);
+  transform-origin: top left; /* Scale from top left corner */
+  animation: zoomInFromIcon 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; /* Smoother easing curve */
+  position: absolute; /* Allow custom positioning */
+  top: 95px; /* Position to overlap the icon - as specified */
+  left: 12px; /* Position to overlap the icon - as specified */
+  will-change: transform, opacity, border-radius; /* Performance optimization */
+}
+
+.mobile-profile-modal.modal-closing {
+  animation: zoomOutToIcon 0.4s cubic-bezier(0.33, 0.66, 0.66, 1) forwards;
+}
+
+.mobile-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-modal-title {
+  margin: 0;
+  padding: 0;
+  color: #d9ecff;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.mobile-modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-modal-body {
+  padding: 15px;
+}
+
+.mobile-modal-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Optimized zoom animations for both mobile and desktop */
+@keyframes zoomInFromIcon {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+    border-radius: 50%;
+  }
+  30% {
+    opacity: 0.7;
+    border-radius: 30%;
+  }
+  70% {
+    opacity: 1;
+    border-radius: 15px;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(0.8);
+    border-radius: 12px;
+  }
+}
+
+@keyframes zoomOutToIcon {
+  0% {
+    opacity: 1;
+    transform: scale(0.8);
+    border-radius: 12px;
+  }
+  30% {
+    opacity: 0.8;
+    border-radius: 15px;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.2);
+    border-radius: 50%;
+  }
+}
+
+/* Add backdrop for mobile modal */
+.mobile-profile-portal::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  animation: fadeIn 0.3s forwards;
+  will-change: opacity; /* Performance optimization */
+}
+
+.mobile-profile-portal.closing::before {
+  animation: fadeOut 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Make sure mobile modal is above navbar */
+@media (max-width: 767px) {
+  .navbar {
+    z-index: 75;
+  }
+  
+  .mobile-profile-portal {
+    z-index: 1000;
+  }
+  
+  /* Force navbar to show when modal is closing
+  .mobile-profile-modal.modal-closing ~ .navbar,
+  .mobile-profile-portal.closing ~ .navbar {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+  }*/
+} 
+
+/* Add desktop zoom animations */
+@media (min-width: 768px) {
+  /* Desktop modal styling */
+  .profile-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    background-color: rgba(0, 0, 0, 0.7);
+    will-change: opacity;
+  }
+  
+  .modal-content {
+    transform-origin: top left;
+    animation: desktopZoomIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity, border-radius;
+  }
+  
+  .modal-content.closing {
+    animation: desktopZoomOut 0.4s cubic-bezier(0.33, 0.66, 0.66, 1) forwards;
+  }
+  
+  @keyframes desktopZoomIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.2);
+      border-radius: 50%;
+    }
+    30% {
+      opacity: 0.4;
+      border-radius: 30%;
+    }
+    70% {
+      opacity: 1;
+      border-radius: 10px;
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+      border-radius: 8px;
+    }
+  }
+  
+  @keyframes desktopZoomOut {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+      border-radius: 8px;
+    }
+    30% {
+      opacity: 0.8;
+      border-radius: 10px;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.2);
+      border-radius: 50%;
+    }
+  }
+}
+
+/* Apply hardware acceleration for smoother animations */
+.profile-modal,
+.modal-content,
+.mobile-profile-portal,
+.mobile-profile-modal {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
+  transform: translateZ(0);
+}
 

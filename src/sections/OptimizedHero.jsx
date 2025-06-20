@@ -160,7 +160,7 @@ const OptimizedHero = () => {
             <br className="hidden md:block" />
             creative solutions. I <span className="font-bold animated-text">specialized</span> in <span className="font-bold animated-text">Full-Stack Development</span> with expertise
             <br className="hidden md:block" />
-            in <span className="font-bold animated-text">ReactJS</span>, <span className="font-bold animated-text">NodeJS</span>, and <span className="font-bold animated-text">modern web technologies</span>. I turn <span className="font-bold animated-text">ideas</span> into <span className="font-bold animated-text">int-</span>
+            in <span className="font-bold animated-text">ReactJS</span>, <span className="font-bold animated-text">NodeJS</span>, and <span className="font-bold animated-text">modern web technologies</span>. I turn <span className="font-bold animated-text">ideas</span> into <span className="font-bold animated-text">int</span>
             <br className="hidden md:block" />
             <span className="font-bold animated-text">eractive experiences</span>. The website shouldn't just exist <span className="font-bold animated-text">it should perform.</span>"
             </p>

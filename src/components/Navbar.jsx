@@ -145,8 +145,24 @@ const Navbar = () => {
   const profileContentRef = useRef(null);
   // Profile container ref for hover detection
   const profileContainerRef = useRef(null);
+  // Portal ref for mobile modal
+  const portalRef = useRef(null);
+  // Track if navbar is hidden (for mobile)
+  const [navbarHidden, setNavbarHidden] = useState(false);
+  // Track if we're on mobile
+  const [isMobile, setIsMobile] = useState(false);
+  // Track if desktop hover is active
+  const isHoveringRef = useRef(false);
 
   useEffect(() => {
+    // Check if we're on mobile - use a throttled handler for better performance
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkMobile();
+    
     // create an event listener for when the user scrolls
     const handleScroll = () => {
       // check if the user has scrolled down at least 10px
@@ -155,61 +171,113 @@ const Navbar = () => {
       setScrolled(isScrolled);
     };
 
-    // add the event listener to the window
-    window.addEventListener("scroll", handleScroll);
+    // add the event listeners
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", checkMobile);
 
-    // cleanup the event listener when the component is unmounted
-    return () => window.removeEventListener("scroll", handleScroll);
+    // cleanup the event listeners when the component is unmounted
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", checkMobile);
+    }
   }, []);
 
-  // Handle profile hover on desktop
+  // Handle profile hover on desktop - fixed to avoid blinking
   const handleProfileMouseEnter = (e) => {
     // Only apply hover behavior on desktop devices
-    if (window.innerWidth >= 768) { // Common breakpoint for desktop
+    if (!isMobile) {
+      // Prevent multiple hover events from triggering the effect again and again
+      if (isHoveringRef.current) return;
+      
+      isHoveringRef.current = true;
+      
       const rect = e.currentTarget.getBoundingClientRect();
       setProfilePosition({
         top: rect.top,
         left: rect.left
       });
-      setShowProfile(true);
+      
+      requestAnimationFrame(() => {
+        // Only set show profile if not already showing
+        if (!showProfile) {
+          setShowProfile(true);
+        }
+      });
     }
   };
 
   const handleProfileMouseLeave = () => {
     // Only apply hover behavior on desktop devices
-    if (window.innerWidth >= 768) {
-      setIsClosing(true);
-      setTimeout(() => {
-        setShowProfile(false);
-        setIsClosing(false);
-      }, 500); // Match this with CSS animation duration
+    if (!isMobile) {
+      isHoveringRef.current = false;
+      
+      // Only start closing if profile is showing
+      if (showProfile) {
+        setIsClosing(true);
+        setTimeout(() => {
+          setShowProfile(false);
+          setIsClosing(false);
+        }, 500); // Match this with CSS animation duration
+      }
     }
   };
 
   // For mobile devices, maintain click behavior
   const openModal = (e) => {
     // Only apply click behavior on mobile devices
-    if (window.innerWidth < 768) {
+    if (isMobile) {
+      // Get precise profile icon position for animation origin
       const rect = e.currentTarget.getBoundingClientRect();
+      
+      // We don't use this for positioning the modal anymore (fixed in CSS)
+      // but keep it for any future use
       setProfilePosition({
         top: rect.top,
         left: rect.left
       });
-      setShowProfile(true);
+      
+      // Show the modal
+      requestAnimationFrame(() => {
+        setShowProfile(true);
+        
+        // Set navbar to hidden for mobile animation with slight delay
+        setTimeout(() => {
+          setNavbarHidden(true);
+        }, 50);
+      });
     }
   };
 
   const closeModal = () => {
+    // Add closing class to both the modal and portal
     setIsClosing(true);
+    
+    // For mobile devices, also mark the portal as closing for the backdrop animation
+    if (isMobile) {
+      // Use ref for better performance instead of querySelector
+      if (portalRef.current) {
+        portalRef.current.classList.add('closing');
+      }
+      
+      // Animate navbar back in immediately to fix disappearing issue
+      setNavbarHidden(false);
+    }
+    
+    // Wait for the animation to complete before hiding the modal
     setTimeout(() => {
       setShowProfile(false);
       setIsClosing(false);
-    }, 500); // Match this with CSS animation duration
+      
+      // Remove the closing class from portal using ref
+      if (portalRef.current && portalRef.current.classList.contains('closing')) {
+        portalRef.current.classList.remove('closing');
+      }
+    }, 500);
   };
 
   return (
-    <header className={`navbar ${scrolled ? "scrolled" : "not-scrolled"}`}>
-      <div className="inner">
+    <header className={`navbar ${scrolled ? "scrolled" : "not-scrolled"} ${navbarHidden ? "navbar-hidden" : ""}`}>
+      <div className={`inner ${navbarHidden ? "inner-hidden" : ""}`}>
         {/* Profile pic container */}
         <div 
           className="profile-container"
@@ -218,7 +286,7 @@ const Navbar = () => {
           onMouseLeave={handleProfileMouseLeave}
         >
           <div 
-            className={`profile-pic ${showProfile ? 'hidden-on-desktop' : ''}`} 
+            className={`profile-pic ${showProfile && !isMobile ? 'hidden-on-desktop' : ''}`} 
             onClick={(e) => openModal(e)}
           >
             <img 
@@ -283,11 +351,33 @@ const Navbar = () => {
         </div>
       </div>
       
-      {/* Profile Modal/Expanded Image */}
-      {showProfile && (
+      {/* Completely separate profile modal element for mobile */}
+      {showProfile && isMobile && (
+        <div className="mobile-profile-portal" ref={portalRef}>
+          <div 
+            className={`mobile-profile-modal ${isClosing ? 'modal-closing' : ''}`}
+          >
+            <div className="mobile-modal-header">
+              <h3 className="mobile-modal-title">Shivesh Mishra</h3>
+              <button className="mobile-modal-close" onClick={closeModal}>&times;</button>
+            </div>
+            <div className="mobile-modal-body">
+              <img 
+                src="/images/profile.jpg" 
+                alt="Shivesh Profile" 
+                className="mobile-modal-image" 
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Desktop profile modal (original) */}
+      {showProfile && !isMobile && (
         <div 
           className={`profile-modal ${isClosing ? 'closing' : ''}`}
-          onClick={window.innerWidth < 768 ? closeModal : undefined}
+          onClick={closeModal}
+          style={{ pointerEvents: isHoveringRef.current ? 'none' : 'auto' }}
         >
           <div 
             ref={profileContentRef}
@@ -296,15 +386,11 @@ const Navbar = () => {
             style={{
               position: 'absolute',
               top: `${profilePosition.top}px`,
-              left: `${profilePosition.left}px`,
-              transform: 'none'
+              left: `${profilePosition.left}px`
             }}
           >
             <div className="modal-header">
               <h3 className="modal-title">Shivesh Mishra</h3>
-              {window.innerWidth < 768 && (
-                <span className="close-modal" onClick={closeModal}>&times;</span>
-              )}
             </div>
             
             <div className={`modal-image-container ${isClosing ? 'closing' : ''}`}>
@@ -321,7 +407,7 @@ const Navbar = () => {
       )}
 
       <style jsx>{`
-        /* Reset transitions for all text elements */
+        /* Base styles */
         .contact-btn .inner {
           transition: background-color 0.3s ease;
         }
@@ -329,11 +415,36 @@ const Navbar = () => {
           transition: color 0.3s ease;
         }
         
+        /* Mobile navbar animation */
+        @media (max-width: 767px) {
+          .navbar {
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+          }
+          
+          .navbar-hidden {
+            transform: translateY(-100%);
+          }
+          
+          .inner {
+            transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+          }
+          
+          .inner-hidden {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+        }
+        
         /* Hide profile pic on desktop when expanded */
         @media (min-width: 768px) {
           .profile-pic.hidden-on-desktop {
             opacity: 0;
             visibility: hidden;
+          }
+          
+          /* Fix for blinking issue - prevent multiple hover events */
+          .profile-modal {
+            pointer-events: auto;
           }
         }
       `}</style>
