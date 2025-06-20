@@ -135,14 +135,16 @@ import { navLinks } from "../constants";
 const Navbar = () => {
   // track if the user has scrolled down the page
   const [scrolled, setScrolled] = useState(false);
-  // state for modal visibility
-  const [showModal, setShowModal] = useState(false);
+  // state for profile hover visibility
+  const [showProfile, setShowProfile] = useState(false);
   // state for closing animation
   const [isClosing, setIsClosing] = useState(false);
   // Reference for profile pic position
   const [profilePosition, setProfilePosition] = useState({ top: 0, left: 0 });
   // Modal content ref
-  const modalContentRef = useRef(null);
+  const profileContentRef = useRef(null);
+  // Profile container ref for hover detection
+  const profileContainerRef = useRef(null);
 
   useEffect(() => {
     // create an event listener for when the user scrolls
@@ -160,20 +162,47 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Toggle modal visibility with animation
+  // Handle profile hover on desktop
+  const handleProfileMouseEnter = (e) => {
+    // Only apply hover behavior on desktop devices
+    if (window.innerWidth >= 768) { // Common breakpoint for desktop
+      const rect = e.currentTarget.getBoundingClientRect();
+      setProfilePosition({
+        top: rect.top,
+        left: rect.left
+      });
+      setShowProfile(true);
+    }
+  };
+
+  const handleProfileMouseLeave = () => {
+    // Only apply hover behavior on desktop devices
+    if (window.innerWidth >= 768) {
+      setIsClosing(true);
+      setTimeout(() => {
+        setShowProfile(false);
+        setIsClosing(false);
+      }, 500); // Match this with CSS animation duration
+    }
+  };
+
+  // For mobile devices, maintain click behavior
   const openModal = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setProfilePosition({
-      top: rect.top,
-      left: rect.left
-    });
-    setShowModal(true);
+    // Only apply click behavior on mobile devices
+    if (window.innerWidth < 768) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      setProfilePosition({
+        top: rect.top,
+        left: rect.left
+      });
+      setShowProfile(true);
+    }
   };
 
   const closeModal = () => {
     setIsClosing(true);
     setTimeout(() => {
-      setShowModal(false);
+      setShowProfile(false);
       setIsClosing(false);
     }, 500); // Match this with CSS animation duration
   };
@@ -182,8 +211,16 @@ const Navbar = () => {
     <header className={`navbar ${scrolled ? "scrolled" : "not-scrolled"}`}>
       <div className="inner">
         {/* Profile pic container */}
-        <div className="profile-container">
-          <div className="profile-pic" onClick={(e) => openModal(e)}>
+        <div 
+          className="profile-container"
+          ref={profileContainerRef}
+          onMouseEnter={handleProfileMouseEnter}
+          onMouseLeave={handleProfileMouseLeave}
+        >
+          <div 
+            className={`profile-pic ${showProfile ? 'hidden-on-desktop' : ''}`} 
+            onClick={(e) => openModal(e)}
+          >
             <img 
               src="/images/profile.jpg" 
               alt="Shivesh" 
@@ -246,14 +283,14 @@ const Navbar = () => {
         </div>
       </div>
       
-      {/* Profile Modal */}
-      {showModal && (
+      {/* Profile Modal/Expanded Image */}
+      {showProfile && (
         <div 
           className={`profile-modal ${isClosing ? 'closing' : ''}`}
-          onClick={closeModal}
+          onClick={window.innerWidth < 768 ? closeModal : undefined}
         >
           <div 
-            ref={modalContentRef}
+            ref={profileContentRef}
             className={`modal-content ${isClosing ? 'closing' : ''}`}
             onClick={(e) => e.stopPropagation()}
             style={{
@@ -265,7 +302,9 @@ const Navbar = () => {
           >
             <div className="modal-header">
               <h3 className="modal-title">Shivesh Mishra</h3>
-              <span className="close-modal" onClick={closeModal}>&times;</span>
+              {window.innerWidth < 768 && (
+                <span className="close-modal" onClick={closeModal}>&times;</span>
+              )}
             </div>
             
             <div className={`modal-image-container ${isClosing ? 'closing' : ''}`}>
@@ -288,6 +327,14 @@ const Navbar = () => {
         }
         .contact-btn .inner * {
           transition: color 0.3s ease;
+        }
+        
+        /* Hide profile pic on desktop when expanded */
+        @media (min-width: 768px) {
+          .profile-pic.hidden-on-desktop {
+            opacity: 0;
+            visibility: hidden;
+          }
         }
       `}</style>
     </header>

@@ -804,3 +804,22 @@ section {
 .navbar .contact-btn .inner span.hidden + span.inline-block {
   margin-left: 0; /* Remove extra margin when "Download" is hidden */
 }
+
+/* Profile hover styles */
+@media (min-width: 768px) {
+  /* Hide profile pic on desktop when expanded */
+  .profile-pic.hidden-on-desktop {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+} 
+  /*Make sure the expanded profile appears on top */
+  
+  .profile-container {
+    position: relative;
+    z-index: 100;
+  }
+  
+
+
